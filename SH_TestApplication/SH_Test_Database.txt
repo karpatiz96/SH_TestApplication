@@ -1,0 +1,10 @@
+1;Zoli;Whatever;Zoli;Karpati;2000-10-01;Budapest;Budapest
+2;Tesztel;Whatever;Teszt;Elek;1996-11-15;Budapest;Stockholm
+3;Tibor;Whatever;Tibor;Kiss;2000-10-01;Sopron;Budapest
+4;Bela;Whatever;Zoli;Karpati;2000-10-01;Budapest;Budapest
+5;Bela2;Whatever;Bela;Kovács;2000-03-23;London;London
+6;Zoli2;Whatever;Tibor;Kiss;2000-10-01;Budapest;Budapest
+7;Zoli3;Whatever;Zoli;Nagy;1980-12-31;Szeged;Miskolc
+8;Bela3;Whatever;Teszt;Elek;2000-10-01;Budapest;Stockholm
+9;John;Whatever;John;Smith;1970-03-15;London;Liverpool
+10;Tibor3;Whatever;Tibor;Kiss;1989-03-15;Budapest;Budapest

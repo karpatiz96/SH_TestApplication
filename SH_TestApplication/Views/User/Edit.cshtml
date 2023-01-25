@@ -1,0 +1,77 @@
+﻿@model SH_TestApplication.Models.UserViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2 class="mb-3">Edit User</h2>
+<div class="row mb-3">
+    <div class="col-md-4">
+        <form asp-controller="User" asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <span class="text-danger">@ViewBag.Message</span>
+            }
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group mb-3">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="BirthDate" class="control-label"></label>
+                <div class='input-group date' id='datepicker'>
+                    <input asp-for="BirthDate" type="text" class="form-control" />
+                    <span class="input-group-append">
+                        <span class="input-group-text bg-white d-block">
+                            <i class="bi bi-calendar"></i>
+                        </span>
+                    </span>
+                </div>
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="BirthPlace" class="control-label"></label>
+                <input asp-for="BirthPlace" class="form-control" />
+                <span asp-validation-for="BirthPlace" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex justify-content-end">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+       $(document).ready(function(){
+            $("#datepicker").datepicker({
+                dateFormat: 'yyyy-mm-dd',
+                format: 'yyyy-mm-dd'
+            });
+            $("#BirthDate").mask('0000-00-00')
+       });
+    </script>
+}

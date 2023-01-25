@@ -1,0 +1,161 @@
+﻿@model IEnumerable<SH_TestApplication.Models.UserListViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2 class="mb-3">Users</h2>
+<div class="mb-3 d-flex justify-content-end">
+    <div class="col-md-1 d-flex justify-content-center">
+        <button id="userEdit" class="btn btn-warning" disabled>Edit</button>
+    </div>
+    <div class="col-md-2">
+        <input type="text" id="search" placeholder="Search" class="form-control" />
+    </div>
+</div>
+<table class="table table-striped mb-3" id="userTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BirthPlace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+        </tr>
+    </thead>
+    <tbody id="usersData">
+@foreach (var item in Model) {
+        <tr id="@item.Id">
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthPlace)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div class="d-flex justify-content-end">
+    <button id="download" class="btn btn-primary" type="submit">Download</button>
+</div>
+
+@section Scripts {
+        <script type="text/javascript">
+            var editId = 1;
+            function Search(input) {
+                $.ajax({
+                    type: "GET",
+                    url: "/User/Search",
+                    data: {
+                        search: input
+                    },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (users) {
+                        var DataSet = $("#usersData");
+                        DataSet.empty();
+                        $.each(users, function (i, user) {
+                            var birthDate = new Date(user.birthDate).toISOString().split('T')[0];
+                            var newRow = "<tr id=\"" + user.id + "\"> <td>" + user.id + "</td>" +
+                                "<td>" + user.userName + "</td>" +
+                                "<td>" + user.firstName + "</td>" +
+                                "<td>" + user.lastName + "</td>" +
+                                "<td>" + birthDate + "</td>" +
+                                "<td>" + user.birthPlace + "</td>" +
+                                "<td>" + user.address + "</td> </tr>";
+                            DataSet.append(newRow);
+                        });
+                        $("#userTable tbody tr").click(function(){
+                            var row = $(this);
+                            if (row.hasClass("table-primary")) {
+                                row.removeClass('table-primary').siblings().removeClass('table-primary');
+                                $("#userEdit").prop("disabled", true);
+                                editId = 1;
+                            } else {
+                                row.addClass('table-primary').siblings().removeClass('table-primary');
+                                $("#userEdit").prop("disabled", false);
+                                editId = row.attr('id');
+                            }
+                        });
+                    }
+                });
+            }
+           $(document).ready(function(){
+                $("#userTable tbody tr").click(function () {
+                    var row = $(this);
+                    if (row.hasClass("table-primary")) {
+                        row.removeClass('table-primary').siblings().removeClass('table-primary');
+                        $("#userEdit").prop("disabled", true);
+                        editId = 1;
+                    } else {
+                        row.addClass('table-primary').siblings().removeClass('table-primary');
+                        $("#userEdit").prop("disabled", false);
+                        editId = row.attr('id');
+                    }
+                });
+                $("#search").keyup(function(){
+                    var searchInput = $.trim($("#search").val());
+                    $("#userEdit").prop("disabled", true);
+                    editId = 1;
+                    if(searchInput.length > 2){
+                        Search(searchInput);
+                    }else{
+                        Search("");
+                    }
+                });
+                $("#download").click(function(){
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "/User/Download", true);
+                    xhr.responseType = "blob"
+                    xhr.onload = function(e){
+                        if (this.status == 200) {
+
+                            var blob = this.response;
+                            var a = document.createElement('a');
+                            a.href = window.URL.createObjectURL(blob);
+                            a.download = "User_Table.xml";
+                            a.dispatchEvent(new MouseEvent('click'));
+                        }
+                    }
+                    xhr.send();
+                });
+                $("#userEdit").click(function(e){
+                    e.preventDefault();
+                    var origin = window.location.origin;
+                    window.location.href = origin + "/User/Edit/" + editId;
+                });
+           });
+        </script>
+}
